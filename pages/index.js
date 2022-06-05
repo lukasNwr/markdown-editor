@@ -4,9 +4,10 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import ReactMarkdown from "react-markdown";
 import React, { useInput } from "react";
-import TextInput from "../components/text-input";
-import MarkdownDisplay from "../components/markdown-display";
+import TextInput from "../components/text-view";
+import MarkdownDisplay from "../components/markdown-view";
 import SplitView from "../components/split-view";
+import TopBar from "../components/topbar";
 
 export default function Home() {
   return (
@@ -17,11 +18,15 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="text-2xl bg-red-200">Hello Friend</div>
-      <ReactMarkdown>Hello **World** in ***Markdown***</ReactMarkdown>
+      <TopBar />
+
       <div>
         <SplitView
-          left={<div className="m-4">Left item</div>}
+          left={
+            <div className="">
+              <TextInput />
+            </div>
+          }
           right={<div className="m-4">Right Item</div>}
         />
       </div>
