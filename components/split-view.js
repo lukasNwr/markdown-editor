@@ -88,7 +88,7 @@ const SplitView = ({ left, right }) => {
 
   useEffect(() => {
     if (leftWidth === undefined) {
-      setLeftWidth(window.innerWidth / 2.1);
+      setLeftWidth(window.innerWidth / 2.02);
     }
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
@@ -102,18 +102,18 @@ const SplitView = ({ left, right }) => {
     <>
       <div
         ref={splitPaneRef}
-        className="h-screen flex flex-row items-start w-full "
+        className="h-screen flex flex-row items-start w-full"
       >
         <LeftPanel leftWidth={leftWidth} setLeftWidth={setLeftWidth}>
           {left}
         </LeftPanel>
         <div
-          className="cursor-col-resize self-stretch flex items-center"
+          className="cursor-col-resize self-stretch flex items-center flex-wrap"
           onMouseDown={onMouseDown}
         >
-          <div className="w-[2px] h-full border-4 bg-black border-black" />
+          <div className="w-[2px] h-full border-4 bg-lightShade border-lightShade" />
         </div>
-        <div className="flex flex-1">{right}</div>
+        <div className="grow">{right}</div>
       </div>
     </>
   );
