@@ -1,9 +1,17 @@
 // Component built with help of this tutorial...
 // https://blog.theodo.com/2020/11/react-resizeable-split-panels/
 
-import React, { createRef, useCallback, useEffect, useState } from "react";
+import React, {
+  createRef,
+  useCallback,
+  useEffect,
+  useState,
+  createContext,
+} from "react";
 
-const MIN_WIDTH = 50;
+const MIN_WIDTH = 400;
+
+export const PreviewToggleContext = createContext();
 
 const LeftPanel = ({ children, leftWidth, setLeftWidth }) => {
   const leftRef = createRef();
@@ -41,10 +49,12 @@ function useWindowSize() {
   return windowSize;
 }
 
+// TODO: toggling markdown (preview) pane messes up its width
+// TODO: adding animation to markdown (preivew) pane toggle
+
 const SplitView = ({ left, right }) => {
-  // TODO: figure out how to set size of the left side
   const windowSize = useWindowSize();
-  //console.log(windowSize);
+  const [previewToggle, setPreviewToggle] = useState(false);
 
   const [leftWidth, setLeftWidth] = useState(windowSize.width);
   const [separatorXPos, setSeparatorXPos] = useState();
@@ -87,6 +97,10 @@ const SplitView = ({ left, right }) => {
   });
 
   useEffect(() => {
+    if (previewToggle) {
+      setLeftWidth(windowSize.width);
+    } 
+
     if (leftWidth === undefined) {
       setLeftWidth(window.innerWidth / 2.02);
     }
@@ -102,18 +116,32 @@ const SplitView = ({ left, right }) => {
     <>
       <div
         ref={splitPaneRef}
-        className="h-screen flex flex-row items-start w-full"
+        className="flex flex-row items-start w-full min-h-screen"
       >
-        <LeftPanel leftWidth={leftWidth} setLeftWidth={setLeftWidth}>
-          {left}
+        <LeftPanel
+          className="h-full"
+          leftWidth={leftWidth}
+          setLeftWidth={setLeftWidth}
+        >
+          <PreviewToggleContext.Provider
+            value={{ previewToggle, setPreviewToggle }}
+          >
+            {left}
+          </PreviewToggleContext.Provider>
         </LeftPanel>
         <div
-          className="cursor-col-resize self-stretch flex items-center flex-wrap"
+          className="flex flex-wrap items-center self-stretch cursor-col-resize"
           onMouseDown={onMouseDown}
         >
           <div className="w-[2px] h-full border-4 bg-lightShade border-lightShade" />
         </div>
-        <div className="grow">{right}</div>
+        <div className={`grow h-full ${previewToggle ? "hidden" : "visible"}`}>
+          <PreviewToggleContext.Provider
+            value={{ previewToggle, setPreviewToggle }}
+          >
+            {right}
+          </PreviewToggleContext.Provider>
+        </div>
       </div>
     </>
   );

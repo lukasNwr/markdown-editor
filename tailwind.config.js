@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'jit',
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
@@ -20,6 +21,17 @@ module.exports = {
         manrope: ["Manrope", "sans-serif"],
         sourceCodePro: ["Source Code Pro", "monospace"],
       },
+      keyframes: {
+        scale: {
+          "0%": { transform: "scale(1)"},
+          "65%": {transform: "scale(0.95)"},
+          "80%": { transform: "scale(1.05)"},
+          "100%": { transform: "scale(1)"}
+        }
+      },
+      animation: {
+        scale: "scale 500ms ease-in-out"
+      }
     },
   },
   plugins: [require("@tailwindcss/typography")],

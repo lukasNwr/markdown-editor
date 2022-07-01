@@ -1,20 +1,39 @@
+import { useEffect, useState } from "react";
+import DropdownMenu from './dropdown.js';
+
 const TopBar = () => {
+
+  const [docTitle, setDocTitle] = useState('New Document')
+
+  const handleDocTitleChange = (event) => {
+    setDocTitle(event.target.value);
+  }
+
+  useEffect(() => {
+    if (docTitle === '.md') {
+      setDocTitle('New Document')
+    }
+  }, [docTitle])
+
   return (
     <>
       <div className="flex bg-lightShade h-16">
         {/* Menu Icon */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 448 512"
-          className="w-20 h-auto p-5 bg-menuShade "
-        >
-          <path
-            fill="#f0f1f2"
-            d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
-          />
-        </svg>
+        {/* <svg */}
+        {/*   xmlns="http://www.w3.org/2000/svg" */}
+        {/*   viewBox="0 0 448 512" */}
+        {/*   className="w-20 h-auto p-5 bg-menuShade " */}
+        {/* > */}
+        {/*   <path */}
+        {/*     fill="#f0f1f2" */}
+        {/*     d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z" */}
+        {/*   /> */}
+        {/* </svg> */}
+        <div className='w-auto maxc-h-16'>
+          <DropdownMenu />
+        </div>
         {/* Main top bar area */}
-        <div className="flex items-center w-full px-4  gap-4">
+        <div className="ml-20 flex items-center w-full px-4  gap-4">
           <span className="uppercase text-whiteText font-manrope font-bold">
             Markdown
           </span>
@@ -35,9 +54,12 @@ const TopBar = () => {
                 <span className="text-darkText text-sm font-manrope font-regular">
                   Document Name
                 </span>
-                <span className="text-sm text-whiteText font-manrope">
-                  New_Document.md
-                </span>
+
+                <input placeholder={docTitle} onChange={handleDocTitleChange} className='text-sm text-whiteText font-manrope outline-none text-left bg-lightShade ' />
+
+                {/* <span className="text-sm text-whiteText font-manrope"> */}
+                {/*   New_Document.md */}
+                {/* </span> */}
               </div>
             </div>
 
