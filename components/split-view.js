@@ -8,6 +8,7 @@ import React, {
   useState,
   createContext,
 } from "react";
+import { ScrollSync, ScrollSyncPane } from "react-scroll-sync";
 
 const MIN_WIDTH = 400;
 
@@ -99,7 +100,7 @@ const SplitView = ({ left, right }) => {
   useEffect(() => {
     if (previewToggle) {
       setLeftWidth(windowSize.width);
-    } 
+    }
 
     if (leftWidth === undefined) {
       setLeftWidth(window.innerWidth / 2.02);
@@ -116,7 +117,7 @@ const SplitView = ({ left, right }) => {
     <>
       <div
         ref={splitPaneRef}
-        className="flex flex-row items-start w-full min-h-screen"
+        className="flex flex-row items-start w-full max-h-[calc(100vh-4rem)]"
       >
         <LeftPanel
           className="h-full"

@@ -1,16 +1,32 @@
 import ReactMarkdown from "react-markdown";
-import React, { useContext } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { TextDataContext } from "../pages/index";
 import remarkGfm from "remark-gfm";
 import { PreviewToggleContext } from "./split-view";
+import { ScrollContext } from '../pages/index'
 
 const MarkdownDisplay = () => {
   const { textData, setTextData } = useContext(TextDataContext);
   const { previewToggle, setPreviewToggle } = useContext(PreviewToggleContext);
+  const { scrollPosition, setScrollPosition } = useContext(ScrollContext);
+  const [markdownView, setMarkdownView] = useState(null);
+
+  useEffect(() => {
+    // if (markdownView) {
+    //   markdownView.scrollTop = scrollPosition;
+    //   console.log('markdown pos: ' + markdownView.scrollTop);
+    //   console.log('scrollPosition:' + scrollPosition);
+    // }
+    //
+    //
+    if (markdownView) console.log(markdownView)
+
+  }, [markdownView]);
+
 
   return (
     <>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-[calc(100vh-4rem)]">
         <div className="flex justify-between w-full bg-darkShade font-manrope font-regular text-bold text-lightText text-sm h-8 items-center px-2">
           <span className="uppercase mx-3">Preview</span>
           <button
@@ -30,8 +46,9 @@ const MarkdownDisplay = () => {
             </svg>
           </button>
         </div>
-        <div className="flex flex-1 overflow-auto break-words max-h-[calc(100vh-2rem)] w-full bg-mainBg p-4 ">
+        <div className="flex flex-1 overflow-auto break-words max-h-[calc(100vh-6rem)] w-full bg-mainBg p-4 ">
           <ReactMarkdown
+            ref={setMarkdownView}
             components={{
               blockquote: ({ node, ...props }) => (
                 <blockquote

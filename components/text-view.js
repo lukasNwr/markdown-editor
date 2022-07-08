@@ -1,17 +1,26 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { TextDataContext } from "../pages/index";
 import { PreviewToggleContext } from "./split-view";
+import { ScrollContext } from '../pages/index';
 
 const TextInput = () => {
   const { textData, setTextData } = useContext(TextDataContext);
   const { previewToggle, setPreviewToggle } = useContext(PreviewToggleContext);
+  const { scrollPosition, setScrollPosition } = useContext(ScrollContext);
+
+  const textareaRef = useRef(null);
 
   const handleInput = (event) => {
     setTextData(event.target.value);
   };
 
+  const handleScroll = () => {
+    setScrollPosition(textareaRef.current.scrollTop);
+    // console.log('scroll position:' + scrollPosition);
+  };
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <div className=" flex w-full bg-darkShade font-manrope font-regular text-bold text-lightText text-sm h-8 items-center px-2 justify-between">
         <span className="uppercase mx-3">markdown</span>
         <button
@@ -33,9 +42,11 @@ const TextInput = () => {
         </button>
       </div>
       <textarea
-        className="flex-grow w-full max-h-[calc(100vh-2rem)] bg-mainBg text-darkText outline-none text-left font-sourceCodePro p-4 placeholder-darkText"
+        ref={textareaRef}
+        className="flex-grow w-full max-h-[calc(100vh-6rem)] bg-mainBg text-darkText outline-none text-left font-sourceCodePro p-4 placeholder-darkText"
         onChange={handleInput}
         placeholder="Enter Input"
+        onScroll={handleScroll}
       />
     </div>
   );
