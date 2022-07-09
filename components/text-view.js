@@ -1,14 +1,20 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import { TextDataContext } from "../pages/index";
 import { PreviewToggleContext } from "./split-view";
 import { ScrollContext } from '../pages/index';
+import { ScrollSync } from "../pages/index";
 
 const TextInput = () => {
   const { textData, setTextData } = useContext(TextDataContext);
   const { previewToggle, setPreviewToggle } = useContext(PreviewToggleContext);
   const { scrollPosition, setScrollPosition } = useContext(ScrollContext);
+  const { scrollSync, setScrollSync } = useContext(ScrollSync);
 
   const textareaRef = useRef(null);
+
+  useEffect(() => {
+    textareaRef.current.scrollTop = scrollPosition
+  }, [scrollPosition])
 
   const handleInput = (event) => {
     setTextData(event.target.value);

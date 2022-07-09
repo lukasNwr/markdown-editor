@@ -1,27 +1,58 @@
 import ReactMarkdown from "react-markdown";
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { TextDataContext } from "../pages/index";
 import remarkGfm from "remark-gfm";
 import { PreviewToggleContext } from "./split-view";
-import { ScrollContext } from '../pages/index'
+import { ScrollContext } from '../pages/index';
+import { ScrollSync } from '../pages/index';
 
 const MarkdownDisplay = () => {
   const { textData, setTextData } = useContext(TextDataContext);
   const { previewToggle, setPreviewToggle } = useContext(PreviewToggleContext);
   const { scrollPosition, setScrollPosition } = useContext(ScrollContext);
-  const [markdownView, setMarkdownView] = useState(null);
+  const [markdownView, setMarkdownViewRef] = useState(null);
+  const { scrollSync, setScrollSync } = useContext(ScrollSync);
 
   useEffect(() => {
-    // if (markdownView) {
-    //   markdownView.scrollTop = scrollPosition;
-    //   console.log('markdown pos: ' + markdownView.scrollTop);
-    //   console.log('scrollPosition:' + scrollPosition);
-    // }
-    //
-    //
-    if (markdownView) console.log(markdownView)
+    if (!markdownView) {
+      return undefined
+    }
+    if (scrollSync) {
+      markdownView.scrollTop = scrollPosition
+    }
 
-  }, [markdownView]);
+  }, [markdownView, scrollPosition]);
+
+  useEffect(() => {
+    if (scrollSync) scrollToSmoothly(scrollPosition, 250, markdownView)
+  }, [scrollSync])
+
+  function scrollToSmoothly(pos, time, element) {
+    var currentPos = element.scrollTop;
+    var start = null;
+    if (time == null) time = 500;
+    pos = +pos, time = +time;
+    window.requestAnimationFrame(function step(currentTime) {
+      start = !start ? currentTime : start;
+      var progress = currentTime - start;
+      if (currentPos < pos) {
+        element.scrollTo(0, ((pos - currentPos) * progress / time) + currentPos);
+      } else {
+        element.scrollTo(0, currentPos - ((currentPos - pos) * progress / time));
+      }
+      if (progress < time) {
+        window.requestAnimationFrame(step);
+      } else {
+        element.scrollTo(0, pos);
+      }
+    });
+  }
+
+  const handleScroll = () => {
+    if (scrollSync) {
+      setScrollPosition(markdownView.scrollTop)
+    }
+  }
 
 
   return (
@@ -46,9 +77,8 @@ const MarkdownDisplay = () => {
             </svg>
           </button>
         </div>
-        <div className="flex flex-1 overflow-auto break-words max-h-[calc(100vh-6rem)] w-full bg-mainBg p-4 ">
+        <div className="flex flex-1 overflow-auto break-words max-h-[calc(100vh-6rem)] w-full bg-mainBg p-4 " ref={setMarkdownViewRef}>
           <ReactMarkdown
-            ref={setMarkdownView}
             components={{
               blockquote: ({ node, ...props }) => (
                 <blockquote
@@ -62,7 +92,8 @@ const MarkdownDisplay = () => {
             }}
             children={textData}
             remarkPlugins={[remarkGfm]}
-            className="grow prose prose-invert text-darkText self-start h-full w-full overflow-scroll"
+            onScroll={handleScroll}
+            className="grow prose prose-invert text-darkText self-start h-full w-full overflow-scroll scrollbar-hide"
           />
         </div>
       </div>
