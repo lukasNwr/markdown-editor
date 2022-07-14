@@ -4,6 +4,8 @@ import { Menu, Transition } from "@headlessui/react";
 const DropdownMenu = () => {
   const [effect, setEffect] = useState(false);
 
+  const hamburgerLine = `h-1 w-6 my-[0.15rem] rounded-full bg-white transition ease transform duration-300`;
+
   return (
     <div className="top-0 left-0 max-h-16">
       <Menu as="div" className="relative inline-block text-center">
@@ -17,9 +19,30 @@ const DropdownMenu = () => {
                 onAnimationEnd={() => {
                   setEffect(false);
                 }}
-                className="inline-flex w-full justify-center"
+                //className="inline-flex w-full justify-center "
+                className="flex flex-col h-16 w-16 justify-center items-center group"
               >
-                <svg
+                <div
+                  className={`${hamburgerLine} ${
+                    open
+                      ? "rotate-45 translate-y-[0.55rem] bg-accent"
+                      : "bg-darkText group-hover:bg-lightText"
+                  }`}
+                />
+                <div
+                  className={`${hamburgerLine} ${
+                    open ? "opacity-0" : "bg-darkText group-hover:bg-lightText"
+                  }`}
+                />
+                <div
+                  className={`${hamburgerLine}  ${
+                    open
+                      ? "-rotate-45 -translate-y-[0.55rem] bg-accent"
+                      : "bg-darkText group-hover:bg-lightText"
+                  }`}
+                />
+
+                {/* <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 448 512"
                   className={`w-16 h-16 px-5 py-2 mx-2 transform ease-in-out duration-300 ${
@@ -32,7 +55,7 @@ const DropdownMenu = () => {
                     } ${open ? "fill-accent" : "fill-whiteText"}`}
                     d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
                   />
-                </svg>
+                </svg> */}
               </Menu.Button>
             </div>
 
