@@ -15,9 +15,6 @@ export default function Home() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scrollSync, setScrollSync] = useState(false);
 
-  // useEffect(() => {
-  //   console.log(scrollPosition)
-  // }, [scrollPosition])
 
   return (
     <div className={styles.container}>
