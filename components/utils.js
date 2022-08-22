@@ -1,51 +1,42 @@
-export const save = (data) => {
-  if (typeof window !== "undefined") {
-    if ("showSaveFilePicker" in window) {
-      return exportNativeFileSystem(data);
-    }
-    return download(data);
+import FileSaver, { saveAs } from "file-saver";
+
+export const saveFile = (fileContent, fileName, fileType) => {
+  console.log("saveFile");
+  if (fileType === "markdown") {
+    // var file = new File([fileContent], fileName, {
+    //   type: "text/markdown;charset=utf-8",
+    // });
+    var blob = new Blob([fileContent], {
+      type: "text/markdown;charset=utf-8",
+    });
+    FileSaver.saveAs(blob, fileName);
   }
+  // FileSaver.saveAs(file);
 };
 
-const exportNativeFileSystem = async ({ blob, filename }) => {
-  const fileHandle = await getNewFileHandle({ filename });
-  if (!fileHandle) {
-    throw new Error("Cannot access filesystem");
-  }
-  await writeFile({ fileHandle, blob });
+export const openFile = (event) => {
+  let status = [];
+  let fileData = "";
+
+  const fileObj = event.target.files[0];
+  const reader = new FileReader();
+
+  let fileLoaded = (e) => {
+    const fileContents = e.target.result;
+    status.push(
+      `File name: "${fileObj.name}". ` + `Length ${fileContents.length} bytes`
+    );
+
+    fileData = status.join("\n");
+  };
+
+  fileLoaded = fileLoaded.bind(this);
+  reader.onLoad = fileLoaded;
+  reader.readAsText(fileObj);
+
+  return fileData;
 };
 
-const getNewFileHandle = ({ filename }) => {
-  try {
-    const opts = {
-      suggestedName: filename,
-      types: [
-        { description: "Markdown file", accept: { "text/plain": [".md"] } },
-      ],
-    };
-    return showSaveFilePicker(opts);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const writeFile = async ({ fileHandle, blob }) => {
-  const writer = await fileHandle.createWriteble();
-  await writer.write(blob);
-  await writer.close();
-};
-
-const download = async ({ fileHandle, blob }) => {
-  var _a;
-  const a = document.createElement("a");
-  a.style.display = "none";
-  document.body.appendChild(a);
-  const url = window.URL.createObjctURL(blob);
-  a.href = url;
-  a.download = `${filename}.md`;
-  a.click();
-  window.URL.revokeObjectURL(url)((_a = a.parentElement)) === null ||
-  _a === void 0
-    ? void 0
-    : _a.removeChild(a);
+export const uploadToClient = (event) => {
+  console.log("file upload");
 };

@@ -1,9 +1,9 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { TextDataContext } from "../pages/index";
 import { PreviewToggleContext } from "./split-view";
-import { ScrollContext } from '../pages/index';
+import { ScrollContext } from "../pages/index";
 import { ScrollSync } from "../pages/index";
-import useUndoableState from '../components/undoRedo';
+import useUndoableState from "../components/undoRedo";
 
 const TextInput = () => {
   const { textData, setTextData } = useContext(TextDataContext);
@@ -20,16 +20,16 @@ const TextInput = () => {
     index: docStateIndex,
     lastIndex: docStateLastIndex,
     goBack: undoDoc,
-    goForward: redoDoc
+    goForward: redoDoc,
   } = useUndoableState(textData);
 
   const canUndo = docStateIndex > 0;
   const canRedo = docStateIndex < docStateLastIndex;
 
   useEffect(() => {
-    textareaRef.current.scrollTop = scrollPosition
+    textareaRef.current.scrollTop = scrollPosition;
     setTextData(doc.text);
-  }, [scrollPosition, doc.text, setTextData])
+  }, [scrollPosition, doc.text, setTextData]);
 
   const handleInput = (event) => {
     setDoc({ text: event.target.value });
@@ -44,15 +44,29 @@ const TextInput = () => {
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <div className=" flex w-full bg-darkShade font-manrope font-regular text-bold text-lightText text-sm h-8 items-center px-2 justify-between">
         <span className="uppercase mx-3">markdown</span>
-        <div className='flex gap-2'>
-          <button onClick={() => undoDoc()} disabled={!canUndo} title="Undo" >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className='h-4'>
-              <path className={`${canUndo ? 'fill-lightText' : 'fill-darkText'}`} d="M480 256c0 123.4-100.5 223.9-223.9 223.9c-48.84 0-95.17-15.58-134.2-44.86c-14.12-10.59-16.97-30.66-6.375-44.81c10.59-14.12 30.62-16.94 44.81-6.375c27.84 20.91 61 31.94 95.88 31.94C344.3 415.8 416 344.1 416 256s-71.69-159.8-159.8-159.8c-37.46 0-73.09 13.49-101.3 36.64l45.12 45.14c17.01 17.02 4.955 46.1-19.1 46.1H35.17C24.58 224.1 16 215.5 16 204.9V59.04c0-24.04 29.07-36.08 46.07-19.07l47.6 47.63C149.9 52.71 201.5 32.11 256.1 32.11C379.5 32.11 480 132.6 480 256z" />
+        <div className="flex gap-2">
+          <button onClick={() => undoDoc()} disabled={!canUndo} title="Undo">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+              className="h-4"
+            >
+              <path
+                className={`${canUndo ? "fill-lightText" : "fill-darkText"}`}
+                d="M480 256c0 123.4-100.5 223.9-223.9 223.9c-48.84 0-95.17-15.58-134.2-44.86c-14.12-10.59-16.97-30.66-6.375-44.81c10.59-14.12 30.62-16.94 44.81-6.375c27.84 20.91 61 31.94 95.88 31.94C344.3 415.8 416 344.1 416 256s-71.69-159.8-159.8-159.8c-37.46 0-73.09 13.49-101.3 36.64l45.12 45.14c17.01 17.02 4.955 46.1-19.1 46.1H35.17C24.58 224.1 16 215.5 16 204.9V59.04c0-24.04 29.07-36.08 46.07-19.07l47.6 47.63C149.9 52.71 201.5 32.11 256.1 32.11C379.5 32.11 480 132.6 480 256z"
+              />
             </svg>
           </button>
           <button onClick={() => redoDoc()} disabled={!canRedo} title="Redo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className='h-4'>
-              <path className={`${canRedo ? 'fill-lightText' : 'fill-darkText'}`} d="M468.9 32.11c13.87 0 27.18 10.77 27.18 27.04v145.9c0 10.59-8.584 19.17-19.17 19.17h-145.7c-16.28 0-27.06-13.32-27.06-27.2c0-6.634 2.461-13.4 7.96-18.9l45.12-45.14c-28.22-23.14-63.85-36.64-101.3-36.64c-88.09 0-159.8 71.69-159.8 159.8S167.8 415.9 255.9 415.9c73.14 0 89.44-38.31 115.1-38.31c18.48 0 31.97 15.04 31.97 31.96c0 35.04-81.59 70.41-147 70.41c-123.4 0-223.9-100.5-223.9-223.9S132.6 32.44 256 32.44c54.6 0 106.2 20.39 146.4 55.26l47.6-47.63C455.5 34.57 462.3 32.11 468.9 32.11z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+              className="h-4"
+            >
+              <path
+                className={`${canRedo ? "fill-lightText" : "fill-darkText"}`}
+                d="M468.9 32.11c13.87 0 27.18 10.77 27.18 27.04v145.9c0 10.59-8.584 19.17-19.17 19.17h-145.7c-16.28 0-27.06-13.32-27.06-27.2c0-6.634 2.461-13.4 7.96-18.9l45.12-45.14c-28.22-23.14-63.85-36.64-101.3-36.64c-88.09 0-159.8 71.69-159.8 159.8S167.8 415.9 255.9 415.9c73.14 0 89.44-38.31 115.1-38.31c18.48 0 31.97 15.04 31.97 31.96c0 35.04-81.59 70.41-147 70.41c-123.4 0-223.9-100.5-223.9-223.9S132.6 32.44 256 32.44c54.6 0 106.2 20.39 146.4 55.26l47.6-47.63C455.5 34.57 462.3 32.11 468.9 32.11z"
+              />
             </svg>
           </button>
           <button
@@ -79,8 +93,7 @@ const TextInput = () => {
         className="flex-grow w-full max-h-[calc(100vh-6rem)] bg-mainBg text-darkText outline-none text-left font-sourceCodePro p-4 placeholder-darkText"
         onChange={(event) => {
           handleInput(event);
-        }
-        }
+        }}
         placeholder="Enter Input"
         onScroll={handleScroll}
         value={doc.text}

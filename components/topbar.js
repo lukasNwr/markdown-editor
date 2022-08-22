@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import DropdownMenu from "./dropdown.js";
-import FileSaver, { saveAs } from "file-saver";
 import { TextDataContext } from "../pages/index";
 import { ScrollSync } from "../pages/index.js";
+import { saveFile } from "./utils.js";
 
 const TopBar = () => {
   const [docTitle, setDocTitle] = useState("New Document");
@@ -12,14 +12,6 @@ const TopBar = () => {
   const handleDocTitleChange = (event) => {
     setDocTitle(event.target.value);
   };
-
-  async function start() {
-    // Prompt user to select any serial port.
-    const port = await navigator.serial.requestPort();
-
-    // Wait for the serial port to open.
-    await port.open({ baudRate: 9600 });
-  }
 
   useEffect(() => {
     if (docTitle === ".md") {
@@ -98,13 +90,8 @@ const TopBar = () => {
               </svg>
               <button
                 className="flex bg-accent px-3 py-2 rounded-md text-whiteText font-manrope text-sm gap-2 items-center"
-                onClick={() => {
-                  // start();
-                  var blob = new Blob([textData], {
-                    type: "text/markdown;charset=utf-8",
-                  });
-                  FileSaver.saveAs(blob, docTitle);
-                }}
+                // onClick={saveFile(textData, docTitle, "markdown")}
+                onClick={() => saveFile(textData, docTitle, "markdown")}
               >
                 {/* Save Icon */}
                 <svg
