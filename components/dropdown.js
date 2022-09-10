@@ -1,6 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment, useContext, useRef, useState } from "react";
-import { TextDataContext } from "../pages";
+import { TextDataContext } from "../pages/index";
 import { uploadToClient } from "./utils";
 
 const DropdownMenu = () => {
@@ -10,9 +10,33 @@ const DropdownMenu = () => {
 
   const hamburgerLine = `h-1 w-6 my-[0.15rem] rounded-full bg-white transition ease transform duration-300`;
 
-  const testFunc = (event) => {
-    setTestData(URL.createObjectURL(event.target.files[0]));
-    console.log("heyyy");
+  const loadFile = () => {
+    // loads animation script from disk
+    var element = document.createElement("div");
+    element.innerHTML = '<input type="file">';
+    var fileInput = element.firstChild;
+    const content = "";
+
+    fileInput.addEventListener("change", function () {
+      var file = fileInput.files[0];
+
+      if (file.name.match(/\.(md)$/)) {
+        var reader = new FileReader();
+
+        reader.onload = function () {
+          content = reader.result;
+          console.log("textData: " + textData);
+
+          console.log("File loaded!");
+        };
+
+        reader.readAsText(file);
+      } else {
+        alert("File not supported, .md files only");
+      }
+    });
+
+    fileInput.click();
   };
 
   return (
@@ -88,7 +112,14 @@ const DropdownMenu = () => {
                     <Menu.Item>
                       {({ active }) => (
                         <div>
-                          <imgs src={testData}></imgs>
+                          <button
+                            className={`${
+                              active ? "bg-accent text-white" : "text-gray-900"
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                            onClick={loadFile}
+                          >
+                            Open File
+                          </button>
                           {/* <button
                         //   className={`${
                         //     active ? "bg-accent text-white" : "text-gray-900"
@@ -96,11 +127,11 @@ const DropdownMenu = () => {
                         // >
                         //   Open file
                       // </button> */}
-                          <input
+                          {/* <input
                             type="file"
                             name="myFile"
                             onChange={testFunc}
-                          />
+                          /> */}
                         </div>
                       )}
                     </Menu.Item>

@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext } from "react";
-import DropdownMenu from "./dropdown.js";
+import { useContext, useEffect, useState } from "react";
 import { TextDataContext } from "../pages/index";
 import { ScrollSync } from "../pages/index.js";
+import DropdownMenu from "./dropdown.js";
 import { saveFile } from "./utils.js";
 
 const TopBar = () => {
