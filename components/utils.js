@@ -1,42 +1,41 @@
-import FileSaver, { saveAs } from "file-saver";
+import FileSaver from "file-saver";
 
 export const saveFile = (fileContent, fileName, fileType) => {
-  console.log("saveFile");
   if (fileType === "markdown") {
-    // var file = new File([fileContent], fileName, {
-    //   type: "text/markdown;charset=utf-8",
-    // });
     var blob = new Blob([fileContent], {
       type: "text/markdown;charset=utf-8",
     });
     FileSaver.saveAs(blob, fileName);
   }
-  // FileSaver.saveAs(file);
 };
 
-export const openFile = (event) => {
-  let status = [];
-  let fileData = "";
+export const loadFile = (textDataSetter) => {
+  var element = document.createElement("div");
+  element.innerHTML = '<input type="file">';
+  var fileInput = element.firstChild;
+  const content = "";
 
-  const fileObj = event.target.files[0];
-  const reader = new FileReader();
+  fileInput.addEventListener("change", function () {
+    var file = fileInput.files[0];
 
-  let fileLoaded = (e) => {
-    const fileContents = e.target.result;
-    status.push(
-      `File name: "${fileObj.name}". ` + `Length ${fileContents.length} bytes`
-    );
+    if (file.name.match(/\.(md)$/)) {
+      var reader = new FileReader();
 
-    fileData = status.join("\n");
-  };
+      reader.onload = function () {
+        content = reader.result;
+        textDataSetter(content);
+        console.log("File loaded succesfully!");
+      };
 
-  fileLoaded = fileLoaded.bind(this);
-  reader.onLoad = fileLoaded;
-  reader.readAsText(fileObj);
+      reader.readAsText(file);
+    } else {
+      alert("File not supported, .md files only");
+    }
+  });
 
-  return fileData;
+  fileInput.click();
 };
 
-export const uploadToClient = (event) => {
-  console.log("file upload");
+export const clearTextData = (textDataSetter) => {
+  textDataSetter("");
 };

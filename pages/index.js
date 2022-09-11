@@ -1,17 +1,17 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import React, { useState, createContext } from "react";
-import TextInput from "../components/text-view";
+import React, { createContext, useState } from "react";
 import MarkdownDisplay from "../components/markdown-view";
 import SplitView from "../components/split-view";
+import TextInput from "../components/text-view";
 import TopBar from "../components/topbar";
+import styles from "../styles/Home.module.css";
 
 export const TextDataContext = createContext();
 export const ScrollContext = createContext();
 export const ScrollSync = createContext();
 
 export default function Home() {
-  const [textData, setTextData] = useState("Default Text");
+  const [textData, setTextData] = useState("");
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scrollSync, setScrollSync] = useState(false);
 

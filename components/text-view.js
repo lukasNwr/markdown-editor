@@ -1,15 +1,12 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
-import { TextDataContext } from "../pages/index";
-import { PreviewToggleContext } from "./split-view";
-import { ScrollContext } from "../pages/index";
-import { ScrollSync } from "../pages/index";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import useUndoableState from "../components/undoRedo";
+import { ScrollContext, TextDataContext } from "../pages/index";
+import { PreviewToggleContext } from "./split-view";
 
 const TextInput = () => {
   const { textData, setTextData } = useContext(TextDataContext);
   const { previewToggle, setPreviewToggle } = useContext(PreviewToggleContext);
   const { scrollPosition, setScrollPosition } = useContext(ScrollContext);
-  const { scrollSync, setScrollSync } = useContext(ScrollSync);
 
   const textareaRef = useRef(null);
 
@@ -28,8 +25,11 @@ const TextInput = () => {
 
   useEffect(() => {
     textareaRef.current.scrollTop = scrollPosition;
+  }, [scrollPosition]);
+
+  useEffect(() => {
     setTextData(doc.text);
-  }, [scrollPosition, doc.text, setTextData]);
+  }, [doc.text, setTextData]);
 
   const handleInput = (event) => {
     setDoc({ text: event.target.value });
@@ -96,7 +96,7 @@ const TextInput = () => {
         }}
         placeholder="Enter Input"
         onScroll={handleScroll}
-        value={doc.text}
+        value={textData}
       />
     </div>
   );

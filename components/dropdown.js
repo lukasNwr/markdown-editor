@@ -1,42 +1,22 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment, useContext, useRef, useState } from "react";
 import { TextDataContext } from "../pages/index";
-import { uploadToClient } from "./utils";
+import { clearTextData, loadFile } from "./utils";
 
 const DropdownMenu = () => {
   const [effect, setEffect] = useState(false);
-  const [textData, setTextData] = useContext(TextDataContext);
-  const [testData, setTestData] = useState(null);
+  const { textData, setTextData } = useContext(TextDataContext);
 
   const hamburgerLine = `h-1 w-6 my-[0.15rem] rounded-full bg-white transition ease transform duration-300`;
 
-  const loadFile = () => {
-    // loads animation script from disk
-    var element = document.createElement("div");
-    element.innerHTML = '<input type="file">';
-    var fileInput = element.firstChild;
-    const content = "";
-
-    fileInput.addEventListener("change", function () {
-      var file = fileInput.files[0];
-
-      if (file.name.match(/\.(md)$/)) {
-        var reader = new FileReader();
-
-        reader.onload = function () {
-          content = reader.result;
-          console.log("textData: " + textData);
-
-          console.log("File loaded!");
-        };
-
-        reader.readAsText(file);
-      } else {
-        alert("File not supported, .md files only");
-      }
-    });
-
-    fileInput.click();
+  const loadMarkdownTut = () => {
+    const aboutMarkdown = "";
+    fetch("./markdown.md")
+      .then((row) => row.text())
+      .then((text) => {
+        aboutMarkdown = text;
+        setTextData(text);
+      });
   };
 
   return (
@@ -100,7 +80,9 @@ const DropdownMenu = () => {
                           className={`${
                             active ? "bg-accent text-white" : "text-gray-900"
                           } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                          onClick={() => console.log("text:" + textData)}
+                          onClick={() => {
+                            clearTextData(setTextData);
+                          }}
                         >
                           New file
                         </button>
@@ -116,22 +98,12 @@ const DropdownMenu = () => {
                             className={`${
                               active ? "bg-accent text-white" : "text-gray-900"
                             } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                            onClick={loadFile}
+                            onClick={() => {
+                              loadFile(setTextData);
+                            }}
                           >
                             Open File
                           </button>
-                          {/* <button
-                        //   className={`${
-                        //     active ? "bg-accent text-white" : "text-gray-900"
-                        //   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                        // >
-                        //   Open file
-                      // </button> */}
-                          {/* <input
-                            type="file"
-                            name="myFile"
-                            onChange={testFunc}
-                          /> */}
                         </div>
                       )}
                     </Menu.Item>
@@ -144,25 +116,13 @@ const DropdownMenu = () => {
                           className={`${
                             active ? "bg-accent text-white" : "text-gray-900"
                           } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                          onClick={loadMarkdownTut}
                         >
                           About Markdown
                         </button>
                       )}
                     </Menu.Item>
                   </div>
-                  {/* <div className="px-1 py-1">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <button
-                          className={`${
-                            active ? "bg-accent text-white" : "text-gray-900"
-                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                        >
-                          About Markdown
-                        </button>
-                      )}
-                    </Menu.Item>
-                  </div> */}
                 </Menu.Items>
               </div>
             </Transition>
