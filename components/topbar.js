@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { TextDataContext } from "../pages/index";
-import { ScrollSync } from "../pages/index.js";
+import { ScrollSync, TextDataContext } from "../pages/editor";
 import DropdownMenu from "./dropdown.js";
 import { saveFile } from "./utils.js";
 

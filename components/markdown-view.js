@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ScrollContext, ScrollSync, TextDataContext } from "../pages/index";
+import { ScrollContext, ScrollSync, TextDataContext } from "../pages/editor";
 import { PreviewToggleContext } from "./split-view";
 
 const MarkdownDisplay = () => {

@@ -1,23 +1,13 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment, useContext, useRef, useState } from "react";
-import { TextDataContext } from "../pages/index";
-import { clearTextData, loadFile } from "./utils";
+import { TextDataContext } from "../pages/editor";
+import { clearTextData, loadFile, loadMarkdownTut } from "./utils";
 
 const DropdownMenu = () => {
   const [effect, setEffect] = useState(false);
   const { textData, setTextData } = useContext(TextDataContext);
 
   const hamburgerLine = `h-1 w-6 my-[0.15rem] rounded-full bg-white transition ease transform duration-300`;
-
-  const loadMarkdownTut = () => {
-    const aboutMarkdown = "";
-    fetch("./markdown.md")
-      .then((row) => row.text())
-      .then((text) => {
-        aboutMarkdown = text;
-        setTextData(text);
-      });
-  };
 
   return (
     <div className="top-0 left-0 max-h-16">
@@ -116,7 +106,9 @@ const DropdownMenu = () => {
                           className={`${
                             active ? "bg-accent text-white" : "text-gray-900"
                           } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                          onClick={loadMarkdownTut}
+                          onClick={() => {
+                            loadMarkdownTut(setTextData);
+                          }}
                         >
                           About Markdown
                         </button>

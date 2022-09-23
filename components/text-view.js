@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import useUndoableState from "../components/undoRedo";
-import { ScrollContext, TextDataContext } from "../pages/index";
+import { ScrollContext, TextDataContext } from "../pages/editor";
 import { PreviewToggleContext } from "./split-view";
 
 const TextInput = () => {
@@ -94,7 +94,7 @@ const TextInput = () => {
         onChange={(event) => {
           handleInput(event);
         }}
-        placeholder="Enter Input"
+        placeholder="Enter markdown text"
         onScroll={handleScroll}
         value={textData}
       />

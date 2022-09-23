@@ -9,6 +9,16 @@ export const saveFile = (fileContent, fileName, fileType) => {
   }
 };
 
+export const loadMarkdownTut = (textDataSetter) => {
+  const aboutMarkdown = "";
+  fetch("./markdown.md")
+    .then((row) => row.text())
+    .then((text) => {
+      aboutMarkdown = text;
+      textDataSetter(text);
+    });
+};
+
 export const loadFile = (textDataSetter) => {
   var element = document.createElement("div");
   element.innerHTML = '<input type="file">';

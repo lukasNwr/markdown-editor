@@ -1,19 +1,26 @@
 import Head from "next/head";
-import React, { createContext, useState } from "react";
-import MarkdownDisplay from "../components/markdown-view";
-import SplitView from "../components/split-view";
-import TextInput from "../components/text-view";
-import TopBar from "../components/topbar";
+import React, { createContext, useEffect, useState } from "react";
+import {
+  BsFillFileEarmarkPlusFill,
+  BsFillFolderFill,
+  BsMarkdown,
+  BsMarkdownFill,
+} from "react-icons/bs";
+
+import Link from "next/link";
+import Router from "next/router";
+import { loadFile, loadMarkdownTut } from "../components/utils";
 import styles from "../styles/Home.module.css";
 
-export const TextDataContext = createContext();
-export const ScrollContext = createContext();
-export const ScrollSync = createContext();
-
 export default function Home() {
-  const [textData, setTextData] = useState("");
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [scrollSync, setScrollSync] = useState(false);
+  const [fileData, setFileData] = useState("");
+
+  useEffect(() => {
+    const { pathname } = Router;
+    if (pathname === "/" && fileData != "") {
+      Router.push({ pathname: "/editor", query: { data: fileData } });
+    }
+  }, [fileData]);
 
   return (
     <div className={styles.container}>
@@ -26,10 +33,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex flex-col h-screen w-screen bg-mainBg items-center">
-        <div className="flex flex-col w-full justify-center items-center p-[10rem]">
-          <span className=" font-manrope text-whiteText font-bold text-[10vh] ">
-            EMDIT
+      <div className="flex flex-col justify-between h-screen w-screen bg-mainBg items-center">
+        <div className="flex flex-col w-full justify-center items-center pt-[5rem]">
+          <span className="flex flex-row items-center font-manrope text-whiteText font-bold text-[10vh] ">
+            <BsMarkdown className="mx-4 text-[12vh]" /> EMDIT
           </span>
           <span className="font-manrope text-lightText text-xl">
             Simple editor for creating, editing, and saving Markdown files
@@ -37,25 +44,41 @@ export default function Home() {
           </span>
         </div>
         <div className="flex flex-col gap-5 w-[20vw] font-manrope font-bold text-lightText  items-center">
-          <button className="flex items-center py-4 bg-lightShade hover:bg-lightShadeHover shadow-md w-full rounded-xl hover:text-accent">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 384 512"
-              className="h-5 mx-4"
-            >
-              <path
-                fill="#6a6b6f"
-                d="M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zM332.1 128H256V51.9l76.1 76.1zM48 464V48h160v104c0 13.3 10.7 24 24 24h104v288H48z"
-              />
-            </svg>
-            <span>New File</span>
+          <Link href="/editor">
+            <button className="flex items-center py-4 bg-lightShade hover:bg-lightShadeHover shadow-md w-full rounded-xl hover:text-accent">
+              <BsFillFileEarmarkPlusFill className="mx-4 text-xl" />
+              <span>New File</span>
+            </button>
+          </Link>
+
+          {/* TO DO: Figure out how to load data and redirect to the page with loaded data...
+            - Possible solution could be changing existing loadFile fcion, so that it would
+              have two params, one setterFcion and one new page...  */}
+          <button
+            className="flex items-center py-4 bg-lightShade hover:bg-lightShadeHover shadow-md w-full rounded-xl hover:text-accent"
+            onClick={() => {
+              loadFile(setFileData);
+            }}
+          >
+            <BsFillFolderFill className="mx-4 text-xl" />
+            <span>Open File</span>
           </button>
-          <button className="py-4 bg-lightShade hover:bg-lightShadeHover shadow-md w-full rounded-xl hover:text-accent">
-            Open File
+
+          <button
+            className="flex items-center py-4 bg-lightShade hover:bg-lightShadeHover shadow-md w-full rounded-xl hover:text-accent"
+            onClick={() => {
+              loadMarkdownTut(setFileData);
+            }}
+          >
+            <BsMarkdownFill className="mx-4 text-xl" />
+            <span>About Markdown</span>
           </button>
-          <button className="py-4 bg-lightShade hover:bg-lightShadeHover shadow-md w-full rounded-xl hover:text-accent">
-            About Markdown
-          </button>
+        </div>
+
+        <div className="flex justify-center items-center w-full h-16 ">
+          <span className="text-center text-darkText text-sm font-manrope">
+            Created by Lukas Novorolnik <br /> 2022
+          </span>
         </div>
       </div>
     </div>

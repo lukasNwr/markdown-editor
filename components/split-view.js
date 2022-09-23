@@ -2,13 +2,12 @@
 // https://blog.theodo.com/2020/11/react-resizeable-split-panels/
 
 import React, {
+  createContext,
   createRef,
   useCallback,
   useEffect,
   useState,
-  createContext,
 } from "react";
-import { ScrollSync, ScrollSyncPane } from "react-scroll-sync";
 
 const MIN_WIDTH = 400;
 
@@ -90,7 +89,14 @@ const SplitView = ({ left, right }) => {
         setLeftWidth(newLeftWidth);
       }
     },
-    [dragging, leftWidth, separatorXPos, setSeparatorXPos, setLeftWidth]
+    [
+      dragging,
+      leftWidth,
+      separatorXPos,
+      setSeparatorXPos,
+      setLeftWidth,
+      splitPaneRef,
+    ]
   );
 
   const onMouseUp = useCallback(() => {
@@ -111,7 +117,7 @@ const SplitView = ({ left, right }) => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", onMouseUp);
     };
-  });
+  }, [leftWidth, onMouseUp, previewToggle, windowSize, onMouseMove]);
 
   return (
     <>
